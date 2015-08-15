@@ -31,6 +31,38 @@ The data analyzed here was downloaded on `2015-08-14`.
 
 **Note:** This is a work in progress and is *not* ready for prime time.
 
+## Exploratory Data Analysis
+
+A scatterplot of the daily returns is shown below
+
+```{r dr_scatter_plot, fig.width=6.5,echo=FALSE}
+img <- readPNG("./knitr/inc/png/dji-daily-ret.png")
+ grid.raster(img)
+```
+
+A histogram is plotted below
+
+
+```{r dr_histo_plot, fig.width=7,echo=FALSE}
+img <- readPNG("./knitr/inc/png/dji-daily-ret-histo.png")
+ grid.raster(img)
+```
+
+Now let's look at the tails
+
+```{r dr_histo_tails_plot, fig.width=7,echo=FALSE}
+img <- readPNG("./knitr/inc/png/dji-daily-ret-histo-lo.png")
+ grid.raster(img)
+```
+
+And at a qq plot
+
+```{r dr_qq_plot, fig.width=7,echo=FALSE}
+img <- readPNG("./knitr/inc/png/dji-daily-ret-qq.png")
+ grid.raster(img)
+```
+
+
 ```{r cc_by, fig.width=1,echo=FALSE}
 img <- readPNG("./knitr/inc/png/cc-by.png")
  grid.raster(img)
