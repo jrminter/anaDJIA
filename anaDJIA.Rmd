@@ -29,7 +29,7 @@ They describe their data cleaning process
 
 The data analyzed here was downloaded on `2015-08-14`.
 
-**Note:** This is a work in progress and is *not* ready for prime time.
+**Note:** This is a work in progress.
 
 ## Exploratory Data Analysis
 
