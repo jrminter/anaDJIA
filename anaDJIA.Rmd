@@ -1,0 +1,35 @@
+---
+title: "Analysis of historical daily returns from the DJIA"
+author: "J. R. Minter"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    css: theme/custom.css
+---
+```{r pre_load_lib, echo=FALSE}
+# pre-load libraries
+library(knitr)
+library(png)
+library(grid)
+```
+
+## Introduction
+
+The purpose of this project is to analyse the historical daily
+returns from the Dow Jones Industrial Average (DJIA).
+
+## Data Source
+
+Historical data was obtained from
+[measuringworth.com](http://measuringworth.com/DJA/) and 
+downloaded as a `.csv` file. The original file was stored in 
+this repository without modification.
+They describe their data cleaning process
+[here](http://measuringworth.com/DJA/DowSource.htm).
+
+**Note:** This is a work in progress and is *not* ready for prime time.
+
+```{r cc_by, fig.width=1,echo=FALSE}
+img <- readPNG("./knitr/inc/png/cc-by.png")
+ grid.raster(img)
+```

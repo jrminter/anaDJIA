@@ -1,0 +1,133 @@
+% !TeX program = XeLaTeX
+% ======================= jrmFin.Rnw ======================
+% 3456789012345678901234567890123456789012345678901234567890123456789012
+\documentclass[12pt]{article}
+
+\input{./inc/tex/xelatex-cfg}
+
+% define shortcuts for this particular report
+\newcommand{\PhiRhoZ}{$\Phi(\rho z)$\ }
+
+%% general metadata:
+\newcommand{\theAuthors}{John Minter}
+% \newcommand{\theContributors}{TBD}
+% \newcommand{\theRAN}{xxxxx} 
+\newcommand{\theTitle}{My Title} 
+\newcommand{\theSubject}{TBD} 
+\newcommand{\theKeywords}{Some, words}
+\newcommand{\theDate}{DRAFT: \today}
+
+% automatic hyperlinks in document
+
+\hypersetup
+{
+colorlinks=true,
+linkcolor=NavyBlue,
+citecolor=NavyBlue,
+urlcolor=NavyBlue,
+bookmarksnumbered=true,
+bookmarksopen=false,
+bookmarksopenlevel=1,
+pdfpagemode={UseOutlines},
+pdfpagelayout={SinglePage},
+pdfview=Fit,
+pdfstartview=Fit,
+pdfauthor={\theAuthors},
+pdfsubject={\theSubject},
+pdftitle={\theTitle},
+pdfkeywords={\theKeywords}
+}
+%
+
+\begin{document}
+%\VignetteEngine{knitr::knitr}
+
+<<setup, include=FALSE, cache=FALSE, message=FALSE>>=
+rm(list=ls())
+# make sure needed packages & functions are loaded
+library(knitr)
+library(xtable)
+library(quantmod)
+# set global chunk options
+opts_chunk$set(fig.path='figure/knitr-', fig.align='center', fig.show='hold')
+options(formatR.arrow=TRUE,width=90)
+
+options(digits=4, width=65, continue=" ")
+
+# set as needed
+str.wd <- '~/git/anaDJIA/knitr/'
+setwd(str.wd)
+Sys.setenv(TEXINPUTS=str.wd)
+Sys.setenv(BIBINPUTS=str.wd)
+Sys.setenv(BSTINPUTS=str.wd)
+@
+
+%% this is a very simple title w/o make title
+
+%% a logo at the upper right corner
+\includegraphics[width=2in]
+{./inc/pdf/M3A.pdf} \\
+
+% \large{
+\begin{tabular}{r l}
+% \textbf{Report Accession Number:} & \theRAN \\
+% \textbf{Security Classification:} & CONFIDENTIAL \\
+% \textbf{Organization:}            & Kodak Technology Center \\
+% \textbf{Division:}                & Technical Solutions \\
+% \textbf{Laboratory:}              & Microscopy \& Spectroscopy \\
+\textbf{Authors:}                 & \theAuthors  \\
+% \textbf{Kodak Contributors:}      & \theContributors \\
+\textbf{Date:}                    & \theDate \\
+\end{tabular}
+% }
+
+\begin{abstract}
+
+Right now this is a place-holder. Eventually it will contain a
+formal report of analysis.\ldots
+
+\vskip 12pt
+Note the the reader: If you are reading a PDF, most other
+\textcolor{NavyBlue}{light blue} text
+entries are hyperlinks to aid navigation.
+
+\end{abstract}
+\pagenumbering{arabic}
+\thispagestyle{empty}
+
+% copyright at bottom of first page
+\begin{figure*}[b]
+\noindent
+\hrulefill \\
+\input{./inc/tex/copyright.tex}
+\end{figure*}
+
+\raggedbottom
+
+\newpage
+
+{
+\setlength{\parskip}{0pt}
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+}
+
+\newpage
+
+
+\section{Introduction}
+
+Some text
+
+\section{Methods}
+
+% For bibtex...
+\bibliographystyle{IEEEtran}  % (uses file "IEEEtran.bst")
+\bibliography{./inc/theBib}
+
+
+\end{document}
