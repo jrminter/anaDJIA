@@ -12,7 +12,11 @@ makeCorrectDate <- function(str){
   c
 }
 
-
+nBrks <- 250
+kern.bw <- "nrd0"
+legend.loc='topright'
+scale.mult <- 1.1
+plt.median <- TRUE
 strCsv <- "../dat/csv/DJA.csv"
 dat <- read.csv(strCsv, skip=4, header=TRUE,  quote = "\"", colClasses=c("character", "character"))
 print(head(dat))
@@ -47,6 +51,35 @@ plot(dji.dr,
 dev.copy(png,'../knitr/inc/png/dji-daily-ret.png',
          width=1024, height=512)
 dev.off()
+
+h <- hist(djia.ret, breaks=nBrks, plot=FALSE)
+v.med <- median(djia.ret)
+v.mu  <- mean(djia.ret)
+v.sd  <- sd(djia.ret)
+d.max <- max(h$density)
+hist(djia.ret, breaks=nBrks, main=NULL, probability=TRUE,
+     ylim=c(0, scale.mult*d.max), xlab="DJIA daily returns")
+if(plt.median){
+  x.t <- c(v.med, v.med)
+  y.t <- c(0, d.max)
+  lines(x.t, y.t, col='blue', lw=2)
+}
+lines(density(djia.ret, kern.bw), col='red')
+legend(x=legend.loc, c('data','kernel density'),
+       lty=c(1,1),col=c('black', 'red'))
+dev.copy(png,'../knitr/inc/png/dji-daily-ret-histo.png',
+         width=1024, height=512)
+dev.off()
+
+qqnorm(djia.ret, col='black',
+       xlab='Theoretical Quantiles',
+       ylab=paste0('Sample Quantiles ', "DJIA daily returns"),
+       main=NULL, pch=19, cex=.5)
+qqline(djia.ret, col='red', lw=2)
+dev.copy(png,'../knitr/inc/png/dji-daily-ret-qq.png',
+         width=1024, height=512)
+dev.off()
+
 
 # save the dataframe, but we don't track it
 save(dji.dr, file='../dat/dji.dr.RData')
