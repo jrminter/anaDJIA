@@ -15,7 +15,7 @@ library(grid)
 
 ## Introduction
 
-The purpose of this project is to analyse the historical daily
+The purpose of this project is to analyze the historical daily
 returns from the Dow Jones Industrial Average (DJIA).
 
 ## Data Source
@@ -33,6 +33,8 @@ The data analyzed here was downloaded on `2015-08-14`.
 
 ## Exploratory Data Analysis
 
+All the analysis here was performed using the `R` statistical processing language (R version 3.2.1 Patched (2015-06-18 r68542)) with the packages `xts` and `zoo`. The report was generated using `R-Studio` and `knitr`. To get the best output, the plots were stored as PDF files, the margins cropped with `pdfcrop` and then converted to 200 dpi png files using `ImageJ`.
+
 A scatterplot of the daily returns is shown below
 
 ```{r dr_scatter_plot, fig.width=6.5,echo=FALSE}
@@ -48,21 +50,21 @@ img <- readPNG("./knitr/inc/png/dji-daily-ret-histo.png")
  grid.raster(img)
 ```
 
-Now let's look at the tails
+Now let's look at the tails. The abscissa of this plot is the daily return. These values range from -0.226 (-22.6%!) to 0.153 (15.3%). **There is a substantial variance in this data set.**
 
 ```{r dr_histo_tails_plot, fig.width=7,echo=FALSE}
 img <- readPNG("./knitr/inc/png/dji-daily-ret-histo-lo.png")
  grid.raster(img)
 ```
 
-And at a qq plot
+And at a qq plot. The `theoretical quantiles` are for a normal distribution of returns with a mean of 0.000233479 and a standard deviation of 0.01063935 and represent a normal distribution with the observed mean and standard deviation. These values were measured from the 35835 observations in the data set. Note the significant deviation from the straight line and the fat tails that extend to over 15 standard deviations. **Assuming that this data set is well-modeled by a normal distribution, grossly underestimates the variance.**
 
 ```{r dr_qq_plot, fig.width=7,echo=FALSE}
 img <- readPNG("./knitr/inc/png/dji-daily-ret-qq.png")
  grid.raster(img)
 ```
 
-
+This work is licensed under a  [CC-BY 4.0](http://creativecommons.org/licenses/by/4.0/) licence.
 ```{r cc_by, fig.width=1,echo=FALSE}
 img <- readPNG("./knitr/inc/png/cc-by.png")
  grid.raster(img)

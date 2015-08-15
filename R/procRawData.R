@@ -1,9 +1,9 @@
 # procRawData.R
 rm(list=ls())
-library(quantmod)
+# library(quantmod)
 library(xts)
-library(rFinFuncs)
-setClass('myDate')
+# library(rFinFuncs)
+# setClass('myDate')
 setwd("~/git/anaDJIA/R")
 
 makeCorrectDate <- function(str){
@@ -12,7 +12,7 @@ makeCorrectDate <- function(str){
   c
 }
 
-
+bSavePlots = FALSE
 strCsv <- "../dat/csv/DJA.csv"
 dat <- read.csv(strCsv, skip=4, header=TRUE,  quote = "\"", colClasses=c("character", "character"))
 print(head(dat))
@@ -53,8 +53,8 @@ do.plot <- function(x,
      xlab="Date",
      ylab="Daily Return")
   if(bSave){
-    dev.copy(png,'../knitr/inc/png/dji-daily-ret.png',
-             width=1024, height=512)
+    pdf("../knitr/inc/pdf/dji-daily-ret.pdf",width=7,height=5)
+    plot(x, main="^DJI", xlab="Date", ylab="Daily Return")
     dev.off()
   }
 
@@ -75,8 +75,23 @@ do.plot <- function(x,
   legend(x=legend.loc, c('data','kernel density'),
          lty=c(1,1),col=c('black', 'red'))
   if(bSave){
-    dev.copy(png,'../knitr/inc/png/dji-daily-ret-histo.png',
-             width=1024, height=512)
+    pdf("../knitr/inc/pdf/dji-daily-ret-histo.pdf",width=7,height=5)
+    h <- hist(x, breaks=nBrks, plot=FALSE)
+    v.med <- median(x)
+    v.mu  <- mean(x)
+    v.sd  <- sd(x)
+    d.max <- max(h$density)
+    hist(x, breaks=nBrks, main=NULL, probability=TRUE,
+         ylim=c(0, scale.mult*d.max), xlab="DJIA daily returns")
+    if(plt.median){
+      x.t <- c(v.med, v.med)
+      y.t <- c(0, d.max)
+      lines(x.t, y.t, col='blue', lw=2)
+    }
+    kern.bw <- brMult * bw.nrd0(djia.ret)
+    lines(density(djia.ret, kern.bw), col='red')
+    legend(x=legend.loc, c('data','kernel density'),
+           lty=c(1,1),col=c('black', 'red'))
     dev.off()
   }
 
@@ -90,11 +105,22 @@ do.plot <- function(x,
   lines(density(x, kern.bw), col='red')
   legend(x=legend.loc, c('data','kernel density'),
          lty=c(1,1),col=c('black', 'red'))
+  
   if(bSave){
-    dev.copy(png,'../knitr/inc/png/dji-daily-ret-histo-lo.png',
-             width=1024, height=512)
+    pdf("../knitr/inc/pdf/dji-daily-ret-histo-lo.pdf",width=7,height=5)
+    hist(x, breaks=nBrks, main=NULL, probability=TRUE,
+         ylim=c(0, 0.02*scale.mult*d.max), xlab="DJIA daily returns")
+    if(plt.median){
+      x.t <- c(v.med, v.med)
+      y.t <- c(0, d.max)
+      lines(x.t, y.t, col='blue', lw=2)
+    }
+    lines(density(x, kern.bw), col='red')
+    legend(x=legend.loc, c('data','kernel density'),
+           lty=c(1,1),col=c('black', 'red'))
     dev.off()
   }
+  
   y <- x$djia.dr + v.mu
   y <- y/v.sd
   
@@ -105,12 +131,17 @@ do.plot <- function(x,
          ylim=c(-20,20))
   qqline(y, col='red', lw=2)
   if(bSave){
-    dev.copy(png,'../knitr/inc/png/dji-daily-ret-qq.png',
-           width=1024, height=512)
+    pdf("../knitr/inc/pdf/dji-daily-ret-qq.pdf",width=7,height=5)
+    qqnorm(y, col='black', main='DJIA daily returns',
+           xlab='Theoretical Quantiles',
+           ylab='Sample Quantiles',
+           pch=19, cex=.5, #) , xlim=c(-25,25),
+           ylim=c(-20,20))
+    qqline(y, col='red', lw=2)
     dev.off()
   }
 }
 
-do.plot(dji.dr, FALSE)
+do.plot(dji.dr, bSavePlots)
 # save the dataframe, but we don't track it
 save(dji.dr, file='../dat/dji.dr.RData')
