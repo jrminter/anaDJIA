@@ -57,7 +57,7 @@ img <- readPNG("./knitr/inc/png/dji-daily-ret-histo-lo.png")
  grid.raster(img)
 ```
 
-And at a qq plot. The `theoretical quantiles` are for a normal distribution of returns with a mean of 0.000233479 and a standard deviation of 0.01063935 and represent a normal distribution with the observed mean and standard deviation. These values were measured from the 35835 observations in the data set. Note the significant deviation from the straight line and the fat tails that extend to over 15 standard deviations. **Assuming that this data set is well-modeled by a normal distribution, grossly underestimates the variance.**
+And at a qq plot. The `theoretical quantiles` are for a normal distribution of returns with a mean of 0.000233479 and a standard deviation of 0.01063935 and represent a normal distribution with the observed mean and standard deviation. These values were measured from the 35835 observations in the data set. Note the significant deviation from the straight line and the fat tails that extend to over 15 standard deviations. **Assuming that this data set is well-modeled by a normal distribution grossly underestimates the variance!**
 
 ```{r dr_qq_plot, fig.width=7,echo=FALSE}
 img <- readPNG("./knitr/inc/png/dji-daily-ret-qq.png")
