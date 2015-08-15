@@ -95,12 +95,15 @@ do.plot <- function(x,
              width=1024, height=512)
     dev.off()
   }
+  y <- x$djia.dr + v.mu
+  y <- y/v.sd
   
-  qqnorm(x, col='black',
+  qqnorm(y, col='black', main='DJIA daily returns',
          xlab='Theoretical Quantiles',
-         ylab=paste0('Sample Quantiles ', "DJIA daily returns"),
-         main=NULL, pch=19, cex=.5)
-  qqline(x, col='red', lw=2)
+         ylab='Sample Quantiles',
+          pch=19, cex=.5, #) , xlim=c(-25,25),
+         ylim=c(-20,20))
+  qqline(y, col='red', lw=2)
   if(bSave){
     dev.copy(png,'../knitr/inc/png/dji-daily-ret-qq.png',
            width=1024, height=512)
@@ -111,4 +114,3 @@ do.plot <- function(x,
 do.plot(dji.dr, FALSE)
 # save the dataframe, but we don't track it
 save(dji.dr, file='../dat/dji.dr.RData')
-
