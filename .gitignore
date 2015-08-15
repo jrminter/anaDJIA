@@ -4,3 +4,4 @@
 .DS_Store
 anaDJIA.html
 knitr/anaDJIA.pdf
+dat/*.RData
