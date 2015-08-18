@@ -1,4 +1,8 @@
 set.seed(42)
+setwd("~/git/anaDJIA/R")
+
+bSave <- TRUE
+
 n <- 35835
 # let's use an equivalent normal distribution for quantiles.
 # n <- 1000
@@ -11,4 +15,15 @@ x <- rnorm(n, mean=mu, sd=s)
 y <- x+mu
 y <- y/s
 
-qqnorm(y, pch=19, cex=0.5); qqline(y)
+do.plot <- function()
+{
+  qqnorm(y, pch=19, cex=0.5); qqline(y)
+}
+
+do.plot()
+
+if(bSave){
+  pdf("../knitr/inc/pdf/normal-qq.pdf", width=7, height=5)
+  do.plot()
+  dev.off()
+}

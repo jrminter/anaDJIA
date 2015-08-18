@@ -1,5 +1,5 @@
 % !TeX program = XeLaTeX
-% ======================= jrmFin.Rnw ======================
+% ======================= anaDJIA.Rnw ======================
 % 3456789012345678901234567890123456789012345678901234567890123456789012
 \documentclass[12pt]{article}
 
@@ -12,9 +12,9 @@
 \newcommand{\theAuthors}{John Minter}
 % \newcommand{\theContributors}{TBD}
 % \newcommand{\theRAN}{xxxxx} 
-\newcommand{\theTitle}{My Title} 
-\newcommand{\theSubject}{TBD} 
-\newcommand{\theKeywords}{Some, words}
+\newcommand{\theTitle}{Analysis of historical daily returns from the DJIA} 
+\newcommand{\theSubject}{Econometrics} 
+\newcommand{\theKeywords}{DJIA, normal distribution, fat-tails}
 \newcommand{\theDate}{DRAFT: \today}
 
 % automatic hyperlinks in document
@@ -60,6 +60,11 @@ setwd(str.wd)
 Sys.setenv(TEXINPUTS=str.wd)
 Sys.setenv(BIBINPUTS=str.wd)
 Sys.setenv(BSTINPUTS=str.wd)
+# pre-load libraries
+library(knitr)
+library(png)
+library(grid)
+load('../dat/dji.dr.RData')
 @
 
 %% this is a very simple title w/o make title
@@ -70,21 +75,30 @@ Sys.setenv(BSTINPUTS=str.wd)
 
 % \large{
 \begin{tabular}{r l}
-% \textbf{Report Accession Number:} & \theRAN \\
-% \textbf{Security Classification:} & CONFIDENTIAL \\
-% \textbf{Organization:}            & Kodak Technology Center \\
-% \textbf{Division:}                & Technical Solutions \\
-% \textbf{Laboratory:}              & Microscopy \& Spectroscopy \\
-\textbf{Authors:}                 & \theAuthors  \\
-% \textbf{Kodak Contributors:}      & \theContributors \\
-\textbf{Date:}                    & \theDate \\
+\textbf{Title:}        & \theTitle \\
+\textbf{Author:}       & \theAuthors  \\
+\textbf{Date:}         & \theDate \\
 \end{tabular}
 % }
 
 \begin{abstract}
 
-Right now this is a place-holder. Eventually it will contain a
-formal report of analysis.\ldots
+The purpose of this project is to analyze the historical daily
+returns from the Dow Jones Industrial Average (DJIA), replicating
+and verifying the results of Bilginsoy\cite{Bilginsoy2014a} and
+S\u{a}voiu\cite{Savoiu2013a} from historical data beginning in 1896.
+Our data set was obtained from
+\href{http://measuringworth.com/DJA/)}{measuringworth.com}.
+There were \Sexpr{nrow(dji.dr)} observations.
+
+The key conclusion comes from examining the normal probability plot
+(Figure~\ref{fig:measQQ}.)  The significant deviation from the linearity
+and the fat tails that extend to over 15 standard deviations lead us to
+conclude that assuming that this data set is well-modeled by a normal
+distribution grossly underestimates the variance!
+
+The code to reproduce this analysis is available on
+\href{https://github.com/jrminter/anaDJIA}{github}.
 
 \vskip 12pt
 Note the the reader: If you are reading a PDF, most other
@@ -106,24 +120,113 @@ entries are hyperlinks to aid navigation.
 
 \newpage
 
-{
-\setlength{\parskip}{0pt}
-\setcounter{tocdepth}{2}
-\tableofcontents
-
-\listoffigures
-
-\listoftables
-}
-
-\newpage
-
 
 \section{Introduction}
 
-Some text
+The purpose of this project is to analyze the historical daily
+returns from the Dow Jones Industrial Average (DJIA).
 
-\section{Methods}
+\section{Data Source}
+
+Historical data was obtained from
+\href{http://measuringworth.com/DJA/}{measuringworth.com} and 
+downloaded as a \code{.csv} file. The original file was stored in 
+this repository without modification. The suppliers at
+measuringworth.com describe their data cleaning process
+\href{http://measuringworth.com/DJA/DowSource.htm}{here}. The data
+analyzed here was downloaded on \code{2015-08-14}.
+
+\section{Data Analysis Procedures}
+
+All the analysis here was performed using the \proglang{R} statistical
+processing language (R version 3.2.2) with the packages \pkg{xts} and
+\pkg{zoo}. The script \code{procRawData.R} (in the /code{R} directory)
+does this, saving the daily returns as a data frame in the file
+\code{dji.dr.RData}.
+
+This report was generated using \proglang{R-Studio} IDE and
+\pkg{knitr}. To get the best output, the plots were stored as PDF files,
+the margins cropped with \proglang{pdfcrop} and then converted to 200
+dpi png files using \proglang{ImageJ}. The report may also be compiled 
+using \proglang{Gnu make}.
+
+\section{Exploratory Data Analysis}
+
+A scatterplot of the daily returns is shown in Figure~\ref{fig:dailyRet}.
+The values range from -0.226 (-22.6\%!) to 0.153 (15.3\%) -- quite a 
+range. The full histogram is shown Figure~\ref{fig:fullHist}. Now let's
+look at the tails of the distribution (Figure~\ref{fig:histLo}).
+The abscissa of this plot is the daily return. These values range from
+-0.226 (-22.6\%!) to 0.153 (15.3\%). \textbf{It is an understatement to
+note that There is a substantial variance in this data set!}. Most
+portfolio analyses assume that the distribution of returns are normally
+distributed, with a mean ($\mu$) and a standard deviation ($\sigma$).
+We can estimate these from our \Sexpr{nrow(dji.dr)} observations: 
+($\mu$) = \Sexpr{mean(dji.dr)} and ($\sigma$) = \Sexpr{sd(dji.dr)}.
+Let's first look at a normal probability plot from a distribution from
+a sample analogous to our data set which is normally-distributed (see
+Figure~\ref{fig:normQQ}.) Finally, we examine a quantile-quantile 
+plot of our sample compared to our computed distribution with a matching
+($\mu$) and ($\sigma$) which is shown in Figure~\ref{fig:measQQ}.
+Note the significant deviation from the straight line and the fat tails
+that extend to over 15 standard deviations.
+
+\textbf{Assuming that this
+data set is well-modeled by a normal distribution grossly underestimates
+the variance!}.
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./inc/pdf/dji-daily-ret.pdf}
+  \caption{The daily returns from the Dow Jones Industrial Average from
+  1885-02-16 to 2015-08-13. Note that these values range from -0.226
+  (-22.6\%!) to 0.153 (15.3\%).}
+  \label{fig:dailyRet}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./inc/pdf/dji-daily-ret-histo.pdf}
+  \caption{Complete histogram of the  daily returns from the Dow Jones
+  Industrial Average from 1885-02-16 to 2015-08-13. The mean daily
+  return (\Sexpr{mean(dji.dr)}, or \Sexpr{100*mean(dji.dr)}\%) is
+  plotted in blue. The kernel density is plotted in red. Note the tails
+  of the distribution.}
+  \label{fig:fullHist}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./inc/pdf/dji-daily-ret-histo-lo.pdf}
+  \caption{Expanded histogram (to make the tails more visible) of the 
+  daily returns from the Dow Jones Industrial Average from 1885-02-16 to
+  2015-08-13.}
+  \label{fig:histLo}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./inc/pdf/normal-qq.pdf}
+  \caption{A quantile-quantile (normal probability) plot for a
+  normally-distributed  sample of \Sexpr{nrow(dji.dr)} observations.}
+  \label{fig:normQQ}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./inc/pdf/dji-daily-ret-qq.pdf}
+  \caption{A A quantile-quantile (normal probability) plot for the
+  daily returns from the Dow Jones Industrial Average from 1885-02-16 to
+  2015-08-13. Note the significant deviation from the straight line and
+  the fat tails that extend to over 15 standard deviations. Assuming
+  that this data set is well-modeled by a normal distribution grossly
+  underestimates the variance!}
+  \label{fig:measQQ}
+\end{figure}
+
+\clearpage
 
 % For bibtex...
 \bibliographystyle{IEEEtran}  % (uses file "IEEEtran.bst")
